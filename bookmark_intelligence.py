@@ -49,6 +49,11 @@ def main() -> None:
         help="Embedding model for Ollama (default: nomic-embed-text)",
     )
     parser.add_argument(
+        "--llm-model",
+        default="llama3.1:8b",
+        help="LLM model for Ollama (default: llama3.1:8b)",
+    )
+    parser.add_argument(
         "--results",
         "-n",
         type=int,
@@ -180,7 +185,7 @@ def main() -> None:
                 print("No suggestions available.")
         elif args.suggest_categories:
             with Spinner("Analyzing bookmarks and generating category suggestions..."):
-                suggester = CategorySuggester(intelligence.vector_store)
+                suggester = CategorySuggester(intelligence.vector_store, llm_model=args.llm_model)
                 suggestions = suggester.suggest(intelligence.bookmarks, args.use_kmeans)
             if not suggestions:
                 print("No category suggestions available.")
